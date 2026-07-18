@@ -1,0 +1,17 @@
+eclipse.preferences.version=1
+encoding//src/main/java=UTF-8
+encoding//src/main/resources=UTF-8
+encoding//src/main/webapp/adminDashboard.jsp=UTF-8
+encoding//src/main/webapp/dashboard.jsp=UTF-8
+encoding//src/main/webapp/events.jsp=UTF-8
+encoding//src/main/webapp/invalidTicket.jsp=UTF-8
+encoding//src/main/webapp/manageEvents.jsp=UTF-8
+encoding//src/main/webapp/myBookings.jsp=UTF-8
+encoding//src/main/webapp/paymentSuccess.jsp=UTF-8
+encoding//src/main/webapp/profile.jsp=UTF-8
+encoding//src/main/webapp/review.jsp=UTF-8
+encoding//src/main/webapp/verifyTicket.jsp=UTF-8
+encoding//src/main/webapp/wishlist.jsp=UTF-8
+encoding//src/test/java=UTF-8
+encoding//src/test/resources=UTF-8
+encoding/<project>=UTF-8
