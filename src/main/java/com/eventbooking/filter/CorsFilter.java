@@ -26,7 +26,19 @@ public class CorsFilter implements Filter {
         
         String origin = req.getHeader("Origin");
 
-        if ("http://localhost:8081".equals(origin)) {
+        // Always allow local dev. Allow additional origins via the
+        // ALLOWED_ORIGINS env var (comma-separated), e.g.
+        // "https://anthara.pages.dev,https://anthara.mydomain.com"
+        java.util.Set<String> allowedOrigins = new java.util.HashSet<>();
+        allowedOrigins.add("http://localhost:8081");
+        String extra = System.getenv("ALLOWED_ORIGINS");
+        if (extra != null && !extra.isBlank()) {
+            for (String o : extra.split(",")) {
+                allowedOrigins.add(o.trim());
+            }
+        }
+
+        if (origin != null && allowedOrigins.contains(origin)) {
             res.setHeader("Access-Control-Allow-Origin", origin);
         }
 

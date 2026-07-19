@@ -3,7 +3,7 @@ import axios from "axios";
 // Central Axios instance — point this at the Anthara backend base URL.
 // When ready, replace the mock imports in pages with these service calls.
 export const api = axios.create({
-  baseURL: "http://localhost:8080/Anthara/api",
+  baseURL: "https://anthara-production.up.railway.app/api",
   withCredentials: true,
   headers: {
     "Content-Type": "application/x-www-form-urlencoded",
