@@ -8,4 +8,13 @@
 
     <display-name>Anthara</display-name>
 
+    <!-- Marks the session cookie as Secure so browsers will accept it
+         paired with SameSite=None (set in META-INF/context.xml), which
+         is required for the cross-domain frontend to stay logged in. -->
+    <session-config>
+        <cookie-config>
+            <secure>true</secure>
+        </cookie-config>
+    </session-config>
+
 </web-app>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+    <!-- Allows the session cookie to be sent from a different domain
+         (your Cloudflare frontend) to this backend, which browsers
+         require SameSite=None + Secure for. -->
+    <CookieProcessor className="org.apache.tomcat.util.http.Rfc6265CookieProcessor"
+                      sameSiteCookies="none" />
+</Context>
