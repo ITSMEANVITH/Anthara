@@ -32,29 +32,34 @@ function Events() {
 
   async function loadEvents() {
 
+    // Load events first — this must succeed for the page to work.
+    let eventsData: any[] = [];
     try {
-
       const eventsRes = await EventService.list();
-      const wishlistRes = await WishlistService.get();
-
-      const wishlistIds = wishlistRes.data.map(
-        (w: any) => w.eventId
-      );
-
-      const updatedEvents = eventsRes.data.map((e: any) => ({
-        ...e,
-        wishlisted: wishlistIds.includes(e.eventId),
-      }));
-
-      setEvents(updatedEvents);
-
+      eventsData = eventsRes.data;
     } catch (e) {
-
-      console.error(e);
-
+      console.error("Failed to load events", e);
       alert("Cannot load events");
-
+      return;
     }
+
+    // Load wishlist separately — this is allowed to fail (e.g. user not
+    // logged in returns 401) without breaking the events list.
+    let wishlistIds: number[] = [];
+    try {
+      const wishlistRes = await WishlistService.get();
+      wishlistIds = wishlistRes.data.map((w: any) => w.eventId);
+    } catch (e) {
+      // Not logged in or wishlist unavailable — just treat as empty.
+      wishlistIds = [];
+    }
+
+    const updatedEvents = eventsData.map((e: any) => ({
+      ...e,
+      wishlisted: wishlistIds.includes(e.eventId),
+    }));
+
+    setEvents(updatedEvents);
 
   }
 
@@ -168,7 +173,7 @@ function Events() {
                 date: event.date,
                 time: event.time,
                 image: event.image
-                  ? `http://localhost:8080/Anthara/images/${encodeURIComponent(event.image)}`
+                  ? `https://anthara-production.up.railway.app/images/${encodeURIComponent(event.image)}`
                   : "/placeholder.jpg",
                 price: event.price,
                 category: event.category || "General",

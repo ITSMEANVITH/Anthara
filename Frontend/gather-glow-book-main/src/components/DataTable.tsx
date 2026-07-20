@@ -58,3 +58,4 @@ export function DataTable<T>({ columns, data, emptyLabel }: DataTableProps<T>) {
     </div>
   );
 }
+

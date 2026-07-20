@@ -204,7 +204,7 @@ function BookingSuccess() {
     fullWidth
     onClick={() =>
       window.open(
-        `http://localhost:8080/Anthara/DownloadTicketServlet?bookingId=${booking.bookingId}`,
+        `https://anthara-production.up.railway.app/DownloadTicketServlet?bookingId=${booking.bookingId}`,
         "_blank"
       )
     }
@@ -218,7 +218,7 @@ function BookingSuccess() {
     fullWidth
     onClick={() =>
         window.open(
-            `http://localhost:8080/Anthara/ViewTicketServlet?bookingId=${booking.bookingId}`,
+            `https://anthara-production.up.railway.app/ViewTicketServlet?bookingId=${booking.bookingId}`,
             "_blank"
         )
     }
@@ -232,7 +232,7 @@ function BookingSuccess() {
     fullWidth
     onClick={() =>
         window.open(
-            `http://localhost:8080/Anthara/DownloadCalendarServlet?bookingId=${booking.bookingId}`,
+            `https://anthara-production.up.railway.app/DownloadCalendarServlet?bookingId=${booking.bookingId}`,
             "_blank"
         )
     }

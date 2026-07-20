@@ -9,9 +9,8 @@ import jakarta.mail.util.ByteArrayDataSource;
 
 public class EmailUtil {
 
-    private static final String FROM = "antharaevents@gmail.com";
-    private static final String PASSWORD = "trig lhrl vhpz emvf";
-
+	private static final String FROM = "onboarding@resend.dev";
+	private static final String PASSWORD = System.getenv("RESEND_API_KEY");
     public static void sendEmail(String to,
                                  String subject,
                                  String body) throws Exception {
@@ -19,16 +18,17 @@ public class EmailUtil {
         Properties props = new Properties();
 
         props.put("mail.smtp.auth","true");
-        props.put("mail.smtp.starttls.enable","true");
-        props.put("mail.smtp.host","smtp.gmail.com");
-        props.put("mail.smtp.port","587");
+        
+        props.put("mail.smtp.host","smtp.resend.com");
+        props.put("mail.smtp.port","465");
+        props.put("mail.smtp.ssl.enable","true");
 
         Session session = Session.getInstance(props,
             new Authenticator() {
 
                 protected PasswordAuthentication getPasswordAuthentication() {
 
-                    return new PasswordAuthentication(FROM,PASSWORD);
+                	return new PasswordAuthentication("resend", PASSWORD);
 
                 }
 

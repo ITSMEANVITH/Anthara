@@ -36,7 +36,7 @@ function Home() {
           price: e.price,
           seatsAvailable: e.availableSeats,
           category: e.category || "Events",
-          image: `http://localhost:8080/Anthara/images/${e.image}`,
+          image: `https://anthara-production.up.railway.app/images/${e.image}`,
           featured: true,
           wishlisted: false,
           bookingOpen: e.bookingOpen,

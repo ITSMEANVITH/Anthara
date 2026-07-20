@@ -90,7 +90,7 @@ export const ContactService = {
   send: (data: URLSearchParams) =>
 
     axios.post(
-      "http://localhost:8080/Anthara/ContactServlet",
+      "https://anthara-production.up.railway.app/ContactServlet",
       data,
       {
         headers: {
@@ -102,7 +102,7 @@ export const ContactService = {
   getAll: () =>
 
     axios.get(
-      "http://localhost:8080/Anthara/admin/contactMessages"
+      "https://anthara-production.up.railway.app/admin/contactMessages"
     )
 
 };
@@ -112,7 +112,7 @@ export const NewsletterService = {
   subscribe: (data: URLSearchParams) =>
 
     axios.post(
-      "http://localhost:8080/Anthara/newsletter",
+      "https://anthara-production.up.railway.app/newsletter",
       data,
       {
         headers: {
@@ -146,7 +146,7 @@ export const PaymentService = {
   createOrder: (bookingId: number) =>
 
     axios.post(
-      "http://localhost:8080/Anthara/CreateOrderServlet",
+      "https://anthara-production.up.railway.app/CreateOrderServlet",
 
       new URLSearchParams({
         bookingId: bookingId.toString()
@@ -162,7 +162,7 @@ export const PaymentService = {
   paymentSuccess: (data: URLSearchParams) =>
 
     axios.post(
-      "http://localhost:8080/Anthara/PaymentSuccessServlet",
+      "https://anthara-production.up.railway.app/PaymentSuccessServlet",
 
       data,
 
@@ -190,7 +190,7 @@ export const AdminService = {
   contactMessages: () =>
 
     axios.get(
-        "http://localhost:8080/Anthara/admin/contactMessages"
+        "https://anthara-production.up.railway.app/admin/contactMessages"
     ),
 
   getEvent: (eventId:number) =>
@@ -248,5 +248,6 @@ export const AdminAuthService = {
 
 };
 console.log("API LOADED");
+
 
 

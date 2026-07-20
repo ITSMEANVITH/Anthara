@@ -268,3 +268,4 @@ export function formatDate(iso: string) {
 export function getEvent(id: string) {
   return EVENTS.find((e) => e.id === id);
 }
+

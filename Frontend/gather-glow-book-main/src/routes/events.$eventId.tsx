@@ -110,3 +110,4 @@ function EventDetails() {
     </div>
   );
 }
+

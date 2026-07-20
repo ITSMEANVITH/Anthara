@@ -90,7 +90,7 @@ navigate({
 
       <img
 
-        src={`http://localhost:8080/Anthara/images/${event.image}`}
+        src={`https://anthara-production.up.railway.app/images/${event.image}`}
 
         className="w-full h-72 object-cover rounded-lg mt-5"
 

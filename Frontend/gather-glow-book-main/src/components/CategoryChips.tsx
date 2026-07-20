@@ -28,3 +28,4 @@ export function CategoryChips({ categories, active, onSelect, includeAll = true 
     </div>
   );
 }
+

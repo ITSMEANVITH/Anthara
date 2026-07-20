@@ -6,3 +6,4 @@ export function Loader({ label }: { label?: string }) {
     </div>
   );
 }
+

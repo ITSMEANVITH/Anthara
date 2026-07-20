@@ -29,3 +29,4 @@ export function SearchBar({ value, onChange, onFilterClick, placeholder }: Searc
     </div>
   );
 }
+

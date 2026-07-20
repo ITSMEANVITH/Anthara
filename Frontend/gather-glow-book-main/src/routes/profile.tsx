@@ -227,7 +227,7 @@ function BookingList({
                 leftIcon={<FiDownload />}
                 onClick={() =>
                   window.open(
-                    `http://localhost:8080/Anthara/DownloadTicketServlet?bookingId=${b.bookingId}`,
+                    `https://anthara-production.up.railway.app/DownloadTicketServlet?bookingId=${b.bookingId}`,
                     "_blank"
                   )
                 }

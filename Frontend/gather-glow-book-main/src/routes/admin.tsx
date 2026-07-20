@@ -22,7 +22,7 @@ import { Button } from "@/components/Button";
 
 // Base URL for uploaded event images. Set VITE_API_BASE_URL in your env
 // so this doesn't break outside local dev.
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8080";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "https://anthara-production.up.railway.app";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin Dashboard — Anthara" }] }),

@@ -41,3 +41,4 @@ export function BookingSummary({ event, quantity, fee = 49 }: BookingSummaryProp
     </div>
   );
 }
+
