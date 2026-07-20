@@ -1,54 +1,58 @@
 package com.eventbooking.util;
 
-import java.util.Properties;
-
-import jakarta.mail.*;
-import jakarta.mail.internet.*;
-import jakarta.activation.DataHandler;
-import jakarta.mail.util.ByteArrayDataSource;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.Base64;
 
 public class EmailUtil {
 
-	private static final String FROM = "onboarding@resend.dev";
-	private static final String PASSWORD = System.getenv("RESEND_API_KEY");
-    public static void sendEmail(String to,
-                                 String subject,
-                                 String body) throws Exception {
+    private static final String API_KEY = System.getenv("RESEND_API_KEY");
+    private static final String FROM = "onboarding@resend.dev";
 
-        Properties props = new Properties();
-
-        props.put("mail.smtp.auth","true");
-        
-        props.put("mail.smtp.host","smtp.resend.com");
-        props.put("mail.smtp.port","465");
-        props.put("mail.smtp.ssl.enable","true");
-
-        Session session = Session.getInstance(props,
-            new Authenticator() {
-
-                protected PasswordAuthentication getPasswordAuthentication() {
-
-                	return new PasswordAuthentication("resend", PASSWORD);
-
-                }
-
-            });
-
-        Message message = new MimeMessage(session);
-
-        message.setFrom(new InternetAddress(FROM));
-
-        message.setRecipients(
-            Message.RecipientType.TO,
-            InternetAddress.parse(to));
-
-        message.setSubject(subject);
-
-        message.setContent(body, "text/html");
-
-        Transport.send(message);
-
+    private static String escapeJson(String text) {
+        return text
+                .replace("\\", "\\\\")
+                .replace("\"", "\\\"")
+                .replace("\r", "")
+                .replace("\n", "\\n");
     }
+
+    public static void sendEmail(String to, String subject, String body) throws Exception {
+
+        String json = String.format("""
+        {
+          "from":"%s",
+          "to":["%s"],
+          "subject":"%s",
+          "html":"%s"
+        }
+        """,
+                FROM,
+                to,
+                escapeJson(subject),
+                escapeJson(body));
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("https://api.resend.com/emails"))
+                .header("Authorization", "Bearer " + API_KEY)
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(json))
+                .build();
+
+        HttpClient client = HttpClient.newHttpClient();
+
+        HttpResponse<String> response =
+                client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        System.out.println("Resend Response: " + response.body());
+
+        if (response.statusCode() >= 300) {
+            throw new RuntimeException(response.body());
+        }
+    }
+
     public static void sendEmailWithAttachment(
             String to,
             String subject,
@@ -56,93 +60,53 @@ public class EmailUtil {
             byte[] pdfBytes,
             byte[] calendarBytes) throws Exception {
 
-        Properties props = new Properties();
+        String pdfBase64 = Base64.getEncoder().encodeToString(pdfBytes);
+        String icsBase64 = Base64.getEncoder().encodeToString(calendarBytes);
 
-props.put("mail.smtp.auth","true");
-        
-        props.put("mail.smtp.host","smtp.resend.com");
-        props.put("mail.smtp.port","465");
-        props.put("mail.smtp.ssl.enable","true");
+        String json = String.format("""
+        {
+          "from":"%s",
+          "to":["%s"],
+          "subject":"%s",
+          "html":"%s",
+          "attachments":[
+            {
+              "filename":"Anthara_Ticket.pdf",
+              "content":"%s"
+            },
+            {
+              "filename":"Anthara_Event.ics",
+              "content":"%s"
+            }
+          ]
+        }
+        """,
+                FROM,
+                to,
+                escapeJson(subject),
+                escapeJson(body),
+                pdfBase64,
+                icsBase64);
 
-        Session session = Session.getInstance(props,
-                new Authenticator() {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("https://api.resend.com/emails"))
+                .header("Authorization", "Bearer " + API_KEY)
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(json))
+                .build();
 
-                    protected PasswordAuthentication getPasswordAuthentication() {
+        HttpClient client = HttpClient.newHttpClient();
 
-                    	return new PasswordAuthentication("resend", PASSWORD);
+        HttpResponse<String> response =
+                client.send(request, HttpResponse.BodyHandlers.ofString());
 
+        System.out.println("Resend Response: " + response.body());
 
-                    }
-
-                });
-
-        MimeMessage message = new MimeMessage(session);
-
-        message.setFrom(new InternetAddress(FROM));
-
-        message.setRecipients(
-                Message.RecipientType.TO,
-                InternetAddress.parse(to));
-
-        message.setSubject(subject);
-
-        MimeBodyPart htmlPart = new MimeBodyPart();
-
-        htmlPart.setContent(body, "text/html");
-
-        MimeBodyPart pdfPart = new MimeBodyPart();
-
-        pdfPart.setFileName("Anthara_Ticket.pdf");
-
-        pdfPart.setDataHandler(
-
-                new DataHandler(
-
-                        new ByteArrayDataSource(
-
-                                pdfBytes,
-
-                                "application/pdf"
-
-                        )
-
-                )
-
-        );
-
-        MimeBodyPart calendarPart = new MimeBodyPart();
-
-        calendarPart.setFileName("Anthara_Event.ics");
-
-        calendarPart.setDataHandler(
-
-                new DataHandler(
-
-                        new ByteArrayDataSource(
-
-                                calendarBytes,
-
-                                "text/calendar"
-
-                        )
-
-                )
-
-        );
-
-        Multipart multipart = new MimeMultipart();
-
-        multipart.addBodyPart(htmlPart);
-
-        multipart.addBodyPart(pdfPart);
-
-        multipart.addBodyPart(calendarPart);
-
-        message.setContent(multipart);
-
-        Transport.send(message);
-
+        if (response.statusCode() >= 300) {
+            throw new RuntimeException(response.body());
+        }
     }
+
     public static void sendCancellationEmail(
             String to,
             String userName,
@@ -154,44 +118,25 @@ props.put("mail.smtp.auth","true");
         String subject = "Booking Cancelled | Anthara";
 
         String body =
-            "<div style='font-family:Arial,sans-serif;padding:20px;'>"
-
-            + "<h2 style='color:#dc3545;'> Booking Cancelled</h2>"
-
-            + "<p>Dear <b>" + userName + "</b>,</p>"
-
-            + "<p>Your booking has been cancelled successfully.</p>"
-
-            + "<hr>"
-
-            + "<h3>Booking Details</h3>"
-
-            + "<table style='border-collapse:collapse;'>"
-
-            + "<tr><td><b>Booking ID</b></td><td>: " + bookingId + "</td></tr>"
-
-            + "<tr><td><b>Event</b></td><td>: " + eventName + "</td></tr>"
-
-            + "<tr><td><b>Tickets</b></td><td>: " + tickets + "</td></tr>"
-
-            + "<tr><td><b>Total Amount</b></td><td>: Rs" + amount + "</td></tr>"
-
-            + "<tr><td><b>Status</b></td><td>: <span style='color:red;font-weight:bold;'>CANCELLED</span></td></tr>"
-
-            + "</table>"
-
-            + "<br>"
-
-            + "<p>If this cancellation was not made by you, please contact Anthara Support immediately.</p>"
-
-            + "<br>"
-
-            + "<p>Thank you for choosing <b>Anthara</b>.</p>"
-
-            + "</div>";
+                "<div style='font-family:Arial,sans-serif;padding:20px;'>"
+                        + "<h2 style='color:#dc3545;'>Booking Cancelled</h2>"
+                        + "<p>Dear <b>" + userName + "</b>,</p>"
+                        + "<p>Your booking has been cancelled successfully.</p>"
+                        + "<hr>"
+                        + "<h3>Booking Details</h3>"
+                        + "<table style='border-collapse:collapse;'>"
+                        + "<tr><td><b>Booking ID</b></td><td>: " + bookingId + "</td></tr>"
+                        + "<tr><td><b>Event</b></td><td>: " + eventName + "</td></tr>"
+                        + "<tr><td><b>Tickets</b></td><td>: " + tickets + "</td></tr>"
+                        + "<tr><td><b>Total Amount</b></td><td>: ₹" + amount + "</td></tr>"
+                        + "<tr><td><b>Status</b></td><td><span style='color:red;font-weight:bold;'>CANCELLED</span></td></tr>"
+                        + "</table>"
+                        + "<br>"
+                        + "<p>If this cancellation was not made by you, please contact Anthara Support immediately.</p>"
+                        + "<br>"
+                        + "<p>Thank you for choosing <b>Anthara</b>.</p>"
+                        + "</div>";
 
         sendEmail(to, subject, body);
     }
-    
-
 }
