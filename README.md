@@ -179,9 +179,28 @@ npm run dev
 
 ---
 
-# 📸 Screenshots
+## 📸 Screenshots
 
-> Screenshots can be seen in screenshots folder.
+### 🏠 Home
+![Home](screenshots/home.png)
+
+### 🎉 Events
+![Events](screenshots/events.png)
+
+### 🎟 Booking
+![Booking](screenshots/booking.png)
+
+### 💳 Razorpay
+![Razorpay](screenshots/razorpay.png)
+
+### 💰 Payment Option
+![Payment Option](screenshots/paymentoption.png)
+
+### ✅ Payment Successful
+![Payment Successful](screenshots/paymentsuccessful.png)
+
+### 📱 QR Ticket
+![QR Ticket](screenshots/qr.png)
 
 ---
 
