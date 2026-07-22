@@ -1,83 +1,78 @@
 # 🎟️ Anthara
 
-<p align="center">
-  <strong>A Modern Full-Stack Event Ticket Booking Platform</strong>
-</p>
+<div align="center">
 
-<p align="center">
-Built with React, Java Servlets, MySQL, Railway, Cloudflare and Razorpay
-</p>
+## Modern Full-Stack Event Ticket Booking Platform
 
-<p align="center">
-<a href="https://anthara.anthara.workers.dev">🌐 Live Demo</a> •
-<a href="https://github.com/ITSMEANVITH/Anthara">📂 GitHub Repository</a>
-</p>
+**Discover • Book • Pay • Download • Verify**
+
+![Java](https://img.shields.io/badge/Java-17-orange?style=for-the-badge&logo=openjdk)
+![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![Vite](https://img.shields.io/badge/Vite-7-646CFF?style=for-the-badge&logo=vite)
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![Railway](https://img.shields.io/badge/Railway-Backend-black?style=for-the-badge&logo=railway)
+![Cloudflare](https://img.shields.io/badge/Cloudflare-Workers-F38020?style=for-the-badge&logo=cloudflare)
+![Razorpay](https://img.shields.io/badge/Razorpay-Payments-0C61F7?style=for-the-badge&logo=razorpay)
+![MIT License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+
+### 🌐 Live Demo
+
+https://anthara.anthara.workers.dev
+
+</div>
 
 ---
 
 # 📖 About
 
-Anthara is a modern full-stack event ticket booking platform designed to provide a seamless experience for discovering events, booking tickets securely, managing bookings, and verifying digital tickets.
+Anthara is a modern **Full-Stack Event Ticket Booking Platform** built using **React, Java Servlets, JSP, MySQL, Railway, Cloudflare Workers, Razorpay and Brevo API**.
 
-The application uses a React frontend with a Java Servlet backend connected to a MySQL database. It integrates Razorpay for secure online payments and Brevo for transactional email notifications.
-
-The platform is deployed using Cloudflare Workers for the frontend and Railway for the backend.
+The platform enables users to discover events, securely book tickets, complete online payments, receive email confirmations, download PDF tickets, verify QR tickets and manage bookings through a clean and responsive interface.
 
 ---
 
 # ✨ Features
 
-## 👤 User Features
+## 👤 User Module
 
-- Secure User Registration
-- Login Authentication
+- User Registration
+- Secure Login
 - BCrypt Password Encryption
-- Forgot Password with OTP Verification
+- Forgot Password (OTP Verification)
 - Profile Management
 
----
-
-## 🎉 Event Features
+## 🎉 Event Module
 
 - Browse Events
-- Event Details
 - Search Events
+- Event Details
 - Wishlist
-- Book Tickets
+- Ticket Booking
 - Booking History
-- Cancel Booking
+- Booking Cancellation
 
----
-
-## 💳 Payment
+## 💳 Payment Module
 
 - Razorpay Integration
 - Secure Payment Verification
 - Order Creation
+
+## 📧 Email Module
+
+- OTP Email
 - Booking Confirmation
-
----
-
-## 📧 Email Services
-
-- Booking Confirmation Email
-- Booking Cancellation Email
-- OTP Verification Email
+- Cancellation Email
 - Newsletter Subscription
-- Contact Form Support
+- Contact Form
 
----
+## 🎟 Ticket Module
 
-## 🎟 Ticket Management
-
-- Download PDF Ticket
-- QR Code Ticket
+- PDF Ticket Download
+- QR Code Generation
 - QR Ticket Verification
 - Calendar (.ics) Download
 
----
-
-## 👨‍💼 Admin Features
+## 👨‍💼 Admin Module
 
 - Secure Admin Login
 - Dashboard
@@ -88,67 +83,49 @@ The platform is deployed using Cloudflare Workers for the frontend and Railway f
 
 ---
 
-# 🛠 Tech Stack
+# 🚀 Tech Stack
 
-## Frontend
-
-- React
-- Vite
-- HTML5
-- CSS3
-- JavaScript
-
-## Backend
-
-- Java
-- Java Servlets
-- JSP
-- Maven
-
-## Database
-
-- MySQL
-
-## Cloud
-
-- Railway
-- Cloudflare Workers
-
-## Payment Gateway
-
-- Razorpay
-
-## Email Service
-
-- Brevo API
+| Category | Technologies |
+|-----------|--------------|
+| Frontend | React, Vite, HTML5, CSS3, JavaScript |
+| Backend | Java, Java Servlets, JSP, Maven |
+| Database | MySQL |
+| Payment | Razorpay |
+| Email | Brevo API |
+| Frontend Hosting | Cloudflare Workers |
+| Backend Hosting | Railway |
 
 ---
 
 # 🏗 System Architecture
 
-```
-                 React + Vite
-          (Cloudflare Workers)
-                     │
-                     │ REST API
-                     ▼
-        Java Servlets + JSP (Railway)
-                     │
-                  JDBC
-                     │
-                  MySQL
-               /            \
-         Razorpay        Brevo API
+```mermaid
+flowchart TD
+
+A[React + Vite Frontend]
+-->B[Cloudflare Workers]
+
+B-->C[Java Servlet Backend]
+
+C-->D[(MySQL Database)]
+
+C-->E[Razorpay Payment Gateway]
+
+C-->F[Brevo Email API]
 ```
 
 ---
 
 # 📂 Project Structure
 
-```
+```text
 Anthara
 │
 ├── Frontend/
+│   ├── src/
+│   ├── public/
+│   ├── package.json
+│   └── vite.config.js
 │
 ├── src/
 │   └── main/
@@ -158,13 +135,14 @@ Anthara
 │
 ├── pom.xml
 ├── Dockerfile
+├── LICENSE
 ├── README.md
 └── .gitignore
 ```
 
 ---
 
-# 🚀 Installation
+# 🚀 Getting Started
 
 ## Clone Repository
 
@@ -180,8 +158,6 @@ mvn clean install
 
 Deploy the generated WAR file on Apache Tomcat.
 
----
-
 ## Frontend
 
 ```bash
@@ -194,46 +170,79 @@ npm run dev
 # 🌍 Deployment
 
 | Component | Platform |
-|------------|----------|
+|-----------|----------|
 | Frontend | Cloudflare Workers |
 | Backend | Railway |
 | Database | MySQL |
-| Payment | Razorpay |
-| Email | Brevo |
+| Payment Gateway | Razorpay |
+| Email Service | Brevo API |
 
 ---
 
 # 📸 Screenshots
 
-Screenshots added in the screenshots folder.
+> Screenshots can be seen in screenshots folder.
 
 ---
 
-# 📋 Future Enhancements
+# 🔥 Highlights
+
+- Modern Responsive UI
+- Secure Authentication
+- REST API Architecture
+- Online Payments
+- Email Notifications
+- QR Ticket Verification
+- PDF Ticket Generation
+- Calendar Integration
+- Admin Dashboard
+- Production Deployment
+
+---
+
+# 🚀 Future Enhancements
 
 - Seat Selection
-- Google Authentication
+- Google Login
 - AI Event Recommendations
 - Event Categories
 - Mobile Application
-- Dark Mode
 - Push Notifications
+- Dark Mode
+- Reviews & Ratings
 
 ---
 
 # 👥 Contributors
 
+<table>
+<tr>
+
+<td align="center" width="50%">
+
+<a href="https://github.com/RanjithaSShetty05">
+<img src="https://github.com/RanjithaSShetty05.png" width="140px;" alt="Ranjitha S Shetty"/>
+</a>
+
 ## Ranjitha S Shetty
 
 **Frontend Developer & UI/UX Designer**
 
-- UI/UX Design
 - React Frontend Development
-- Responsive Design
-- User Interface Development
+- UI/UX Design
+- Responsive User Interface
+- Frontend Components
 - User Experience Design
 
----
+<a href="https://github.com/RanjithaSShetty05">GitHub Profile ↗</a>
+
+</td>
+
+<td align="center" width="50%">
+
+<a href="https://github.com/ITSMEANVITH">
+<img src="https://github.com/ITSMEANVITH.png" width="140px;" alt="Anvith C D"/>
+</a>
 
 ## Anvith C D
 
@@ -241,20 +250,25 @@ Screenshots added in the screenshots folder.
 
 - Java Backend Development
 - REST API Development
-- Database Design
+- MySQL Database Design
 - Authentication System
 - Razorpay Integration
 - Brevo Email Integration
 - Railway Deployment
 - System Integration
 
+<a href="https://github.com/ITSMEANVITH">GitHub Profile ↗</a>
+
+</td>
+
+</tr>
+</table>
+
 ---
-
-
 
 # 🎓 Academic Information
 
-**College**
+**Institution**
 
 K S Institute of Technology
 
@@ -264,9 +278,15 @@ Computer Science and Design (CSD)
 
 ---
 
-# 🌐 Live Demo
+# 🌐 Links
+
+### Live Website
 
 https://anthara.anthara.workers.dev
+
+### GitHub Repository
+
+https://github.com/ITSMEANVITH/Anthara
 
 ---
 
@@ -278,4 +298,24 @@ If you found this project useful, consider giving it a ⭐ on GitHub.
 
 # 📄 License
 
-This project is licensed under the MIT License.
+This project is licensed under the **MIT License**.
+
+See the **LICENSE** file for more information.
+
+---
+
+<div align="center">
+
+## ❤️ Developed By
+
+### 🎨 Ranjitha S Shetty
+Frontend Developer & UI/UX Designer
+
+### ⚙️ Anvith C D
+Backend Developer
+
+**K S Institute of Technology**
+
+**Computer Science and Design**
+
+</div>
