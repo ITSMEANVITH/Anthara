@@ -8,8 +8,12 @@ import java.util.Base64;
 
 public class EmailUtil {
 
-    private static final String API_KEY = System.getenv("RESEND_API_KEY");
-    private static final String FROM = "onboarding@resend.dev";
+    // Set these as environment variables on Railway:
+    //   BREVO_API_KEY   -> your Brevo API key
+    //   FROM_EMAIL      -> the single sender email you verified in Brevo
+    private static final String API_KEY = System.getenv("BREVO_API_KEY");
+    private static final String FROM = System.getenv().getOrDefault("FROM_EMAIL", "onboarding@resend.dev");
+    private static final String FROM_NAME = "Anthara";
 
     private static String escapeJson(String text) {
         return text
@@ -19,38 +23,44 @@ public class EmailUtil {
                 .replace("\n", "\\n");
     }
 
-    public static void sendEmail(String to, String subject, String body) throws Exception {
-
-        String json = String.format("""
-        {
-          "from":"%s",
-          "to":["%s"],
-          "subject":"%s",
-          "html":"%s"
-        }
-        """,
-                FROM,
-                to,
-                escapeJson(subject),
-                escapeJson(body));
-
+    private static HttpResponse<String> post(String json) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://api.resend.com/emails"))
-                .header("Authorization", "Bearer " + API_KEY)
+                .uri(URI.create("https://api.brevo.com/v3/smtp/email"))
+                .header("api-key", API_KEY)
                 .header("Content-Type", "application/json")
+                .header("Accept", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(json))
                 .build();
 
         HttpClient client = HttpClient.newHttpClient();
-
         HttpResponse<String> response =
                 client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        System.out.println("Resend Response: " + response.body());
+        System.out.println("Brevo Response: " + response.body());
 
         if (response.statusCode() >= 300) {
             throw new RuntimeException(response.body());
         }
+        return response;
+    }
+
+    public static void sendEmail(String to, String subject, String body) throws Exception {
+
+        String json = String.format("""
+        {
+          "sender": {"email":"%s","name":"%s"},
+          "to": [{"email":"%s"}],
+          "subject":"%s",
+          "htmlContent":"%s"
+        }
+        """,
+                FROM,
+                FROM_NAME,
+                to,
+                escapeJson(subject),
+                escapeJson(body));
+
+        post(json);
     }
 
     public static void sendEmailWithAttachment(
@@ -65,46 +75,31 @@ public class EmailUtil {
 
         String json = String.format("""
         {
-          "from":"%s",
-          "to":["%s"],
+          "sender": {"email":"%s","name":"%s"},
+          "to": [{"email":"%s"}],
           "subject":"%s",
-          "html":"%s",
-          "attachments":[
+          "htmlContent":"%s",
+          "attachment": [
             {
-              "filename":"Anthara_Ticket.pdf",
+              "name":"Anthara_Ticket.pdf",
               "content":"%s"
             },
             {
-              "filename":"Anthara_Event.ics",
+              "name":"Anthara_Event.ics",
               "content":"%s"
             }
           ]
         }
         """,
                 FROM,
+                FROM_NAME,
                 to,
                 escapeJson(subject),
                 escapeJson(body),
                 pdfBase64,
                 icsBase64);
 
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://api.resend.com/emails"))
-                .header("Authorization", "Bearer " + API_KEY)
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(json))
-                .build();
-
-        HttpClient client = HttpClient.newHttpClient();
-
-        HttpResponse<String> response =
-                client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        System.out.println("Resend Response: " + response.body());
-
-        if (response.statusCode() >= 300) {
-            throw new RuntimeException(response.body());
-        }
+        post(json);
     }
 
     public static void sendCancellationEmail(
